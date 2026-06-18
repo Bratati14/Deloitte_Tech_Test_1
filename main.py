@@ -41,8 +41,18 @@ def convertFromFormat2 (jsonObject):
 
     # IMPLEMENT: Conversion From Type 1
     # convert the ISO 8601 timestamp to milliseconds since epoch
-    data= datetime.datetime.strptime(jsonObject['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ') #ISO 8601 format
-    timestamp = round((data - datetime.datetime(1970, 1, 1)).total_seconds() * 1000) #convert to milliseconds since epoch
+    # Old code
+    # data= datetime.datetime.strptime(jsonObject['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ') #ISO 8601 format
+    # timestamp = round((data - datetime.datetime(1970, 1, 1)).total_seconds() * 1000) #convert to milliseconds since epoch
+    # Old code End
+    # New code
+    data = datetime.datetime.strptime(
+        jsonObject['timestamp'],
+        '%Y-%m-%dT%H:%M:%S.%fZ'
+    ).replace(tzinfo=datetime.timezone.utc)
+    
+    timestamp = int(data.timestamp() * 1000)
+    # New code End
 
     #create a new dictionary for the unified format
     result={
